@@ -15,6 +15,31 @@ const db = mysql.createConnection({
     database: "fixnest"
 })
 
+app.get('/service', (req, res) => {
+    const sql = "SELECT * FROM `services`";
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error fetching data from database");
+        } else {
+            res.send(data);
+        }
+    });
+});
+
+app.post('/create', (req, res) => {
+    const sql = "INSERT INTO `services`(`name`, `charge`, `picture`, `description`) VALUES (?)";
+    const values = [req.body.serviceName, req.body.charge, req.body.servicePicture, req.body.serviceDescription];
+    db.query(sql, [values], (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error creating data in database");
+        } else {
+            res.send(data);
+        }
+    });
+});
+
 app.get('/', (req, res) => {
     res.send('Project is running properly')
 })
