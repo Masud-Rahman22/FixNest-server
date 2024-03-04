@@ -100,6 +100,22 @@ app.delete('/delete/:id/:table', (req, res) => {
     });
 });
 
+app.put("/update/:table/:id", (req, res) => {
+    const table = req.params.table;
+    const id = req.params.id;
+    const sql = `UPDATE \`${table}\` SET \`id\` = ?, \`name\` = ?, \`type\` = ?, \`price\` = ?, \`picture\` = ?, \`description\` = ? WHERE id = ?`;
+    const values = [id, req.body.itemName, req.body.itemType, req.body.price, req.body.itemPicture, req.body.itemDescription];
+    db.query(sql, [values], (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error updating data in database");
+        } else {
+            res.send(data);
+        }
+    });
+});
+
+
 
 app.get('/', (req, res) => {
     res.send('Project is running properly')
